@@ -38,21 +38,6 @@ public class HueBar implements Parcelable {
 		this.bri = (byte) (( 0 < (byte) bri) ? bri : -(bri));	
 	}
 
-	@Override
-    public int describeContents() {
-	    // TODO Auto-generated method stub
-	    return 0;
-    }
-
-	@Override
-    public void writeToParcel(Parcel arg0, int arg1) {
-		final byte[] hsb = new byte[3];
-		hsb[0] = hue;
-		hsb[1] = sat;
-		hsb[2] = bri;
-	    arg0.writeByteArray(hsb);
-    }
-	
 	public static final Parcelable.Creator<HueBar> CREATOR
     = new Parcelable.Creator<HueBar>() {
 		public HueBar createFromParcel(Parcel in) {
@@ -65,4 +50,17 @@ public class HueBar implements Parcelable {
 		    return new HueBar[size];
 		}
 	};
+
+	public int describeContents() {
+		return 0;
+	}
+
+	public void writeToParcel(Parcel dest, int flags) {
+		final byte[] hsb = new byte[3];
+		hsb[0] = hue;
+		hsb[1] = sat;
+		hsb[2] = bri;
+	    dest.writeByteArray(hsb);
+		
+	}
 }

@@ -25,8 +25,8 @@ public class HueChimesActivity extends Activity implements
         SensorEventListener {
 	private final String TAG = this.getClass().getSimpleName();
 	private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private int pauseint;
+	private Sensor mAccelerometer;
+	private int pauseint;
 
 	private LinearLayout hueChimesLayout;
 	private ArrayList<HueBar> hueList = new ArrayList<HueBar>();
@@ -40,16 +40,19 @@ public class HueChimesActivity extends Activity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, TAG + " is now running");
-		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        pauseint = 0;
+		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		mAccelerometer = mSensorManager
+		        .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		mSensorManager.registerListener(this, mAccelerometer,
+		        SensorManager.SENSOR_DELAY_NORMAL);
+		pauseint = 0;
 
 		hd = new HueDraw(TAG);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(
+		        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		        WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		hueChimesLayout = new LinearLayout(this);
 		ViewGroup.LayoutParams hueChimesParams = new ViewGroup.LayoutParams(
@@ -60,14 +63,15 @@ public class HueChimesActivity extends Activity implements
 		setContentView(hueChimesLayout);
 
 		for (int i = 0, t = 32; i < t; i++) {
-			final HueBar hbar = new HueBar(i%127, 127, 127);
+			int so = this.getScreenOrientation();
+			final HueBar hbar = new HueBar(i % 127, 127, 127);
 			hueList.add(hbar);
-			HueWidget hw = new HueWidget(this, TAG, hd, hbar);
+			HueWidget hw = new HueWidget(this, TAG, hd, hbar, so);
 			hw.setLayoutParams(new ViewGroup.LayoutParams(
 			        ViewGroup.LayoutParams.FILL_PARENT,
 			        ViewGroup.LayoutParams.FILL_PARENT));
 			hueChimesLayout.addView(hw);
-			if (2 == this.getScreenOrientation()) {
+			if (2 == so) {
 				hw.setMinimumWidth(800 / t);
 				hw.setMinimumHeight(480);
 			} else {
@@ -77,7 +81,7 @@ public class HueChimesActivity extends Activity implements
 		}
 
 		hueChimesLayout.setOnTouchListener(new View.OnTouchListener() {
-			@Override
+
 			public boolean onTouch(View v, MotionEvent event) {
 				HueWidget hw;
 				int hi;
@@ -142,26 +146,27 @@ public class HueChimesActivity extends Activity implements
 		return 0;
 	}
 
-	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void onSensorChanged(SensorEvent event) {
 		pauseint += 1;
 		if (5 < pauseint) {
-			/*HueWidget hw;
-			for (int i = 0, z = hueList.size(); i < z; i++) {
-				hw = (HueWidget) (hueChimesLayout.getChildAt(i));
-				if (null != hw) {
-					hw.inputX(event.values[2]);
-					Log.i(TAG, "HueWidget input: " + event.values[2]
-					        + "@ hw" + Integer.toString(i));
-				}
-			}
-			Log.i(TAG, "Pause int is "+ Integer.toString(pauseint));*/
+			/*
+			 * HueWidget hw; for (int i = 0, z =
+			 * hueList.size(); i < z; i++) { hw
+			 * = (HueWidget)
+			 * (hueChimesLayout.getChildAt(i));
+			 * if (null != hw) {
+			 * hw.inputX(event.values[2]);
+			 * Log.i(TAG, "HueWidget input: " +
+			 * event.values[2] + "@ hw" +
+			 * Integer.toString(i)); } }
+			 * Log.i(TAG, "Pause int is "+
+			 * Integer.toString(pauseint));
+			 */
 			pauseint = 0;
 		}
 	}
@@ -192,11 +197,12 @@ public class HueChimesActivity extends Activity implements
 		String log = "onResume";
 		Log.i(TAG, log);
 	}
-	
-	@Override protected void onPause() {
-    	super.onPause();
-    	mSensorManager.unregisterListener(this);
-    }
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mSensorManager.unregisterListener(this);
+	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {

@@ -15,13 +15,15 @@ public class HueWidget extends View {
 	private final HueBar chue;
 	private int inputx;
 	private int inputy;
+	private int sorient;
 
 	public HueWidget(Context context, String TAG, HueDraw hdrawable,
-	        HueBar chue) {
+	        HueBar chue, int sorient) {
 		super(context);
 		this.TAG = TAG;
 		this.chue = chue;
 		this.hdrawable = hdrawable;
+		this.sorient = sorient;
 		inputx = 0;
 		inputy = 0;
 
@@ -42,7 +44,12 @@ public class HueWidget extends View {
 	}
 
 	public void inputY(double y) {
-		final byte temp = (byte)(128 - (y/3));
+		final byte temp;
+		if (2 == sorient) {
+		  temp = (byte)(128 - (y/3));
+		} else {
+	      temp = (byte)(128 - (y/6));
+		}
 		inputy =(0 < temp) ? temp: 0;
 
 		Log.i(TAG,
